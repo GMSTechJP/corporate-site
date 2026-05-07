@@ -33,6 +33,10 @@ jobs:
         run: npm ci
 
       - name: Build
+        # 仮公開期間中はサブパスへのデプロイのため base を有効化
+        # 独自ドメイン gmsbiz.net 切り替え後はこの env を削除
+        env:
+          PROJECT_PAGES_PREVIEW: "1"
         run: npm run build
 
       - name: Upload artifact
