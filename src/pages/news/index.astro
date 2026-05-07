@@ -19,6 +19,8 @@ const categoryLabel: Record<string, string> = {
   release: "リリース",
   event: "イベント",
 };
+
+const base = import.meta.env.BASE_URL;
 ---
 
 <BaseLayout title="お知らせ" description="GMS-Techからの最新のお知らせ・リリース情報・イベント情報をご案内します。">
@@ -33,7 +35,7 @@ const categoryLabel: Record<string, string> = {
         <ul class="news-list">
           {news.map((n) => (
             <li>
-              <a href={`/news/${n.slug}/`}>
+              <a href={`${base}news/${n.slug}/`}>
                 <time datetime={n.data.date.toISOString()}>
                   {formatDate(n.data.date)}
                 </time>

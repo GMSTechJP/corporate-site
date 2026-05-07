@@ -17,6 +17,7 @@ interface Props {
 
 const { entry } = Astro.props;
 const { Content } = await entry.render();
+const base = import.meta.env.BASE_URL;
 
 const formatDate = (d: Date) =>
   new Intl.DateTimeFormat("ja-JP", {
@@ -38,7 +39,7 @@ const categoryLabel: Record<string, string> = {
 >
   <article class="section">
     <div class="container container-narrow">
-      <a href="/news/" class="back-link">← お知らせ一覧へ</a>
+      <a href={`${base}news/`} class="back-link">← お知らせ一覧へ</a>
 
       <header class="news-detail__header">
         <div class="news-detail__meta">
@@ -58,7 +59,7 @@ const categoryLabel: Record<string, string> = {
 
       <hr />
 
-      <a href="/news/" class="back-link">← お知らせ一覧へ</a>
+      <a href={`${base}news/`} class="back-link">← お知らせ一覧へ</a>
     </div>
   </article>
 </BaseLayout>

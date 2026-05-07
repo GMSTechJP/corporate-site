@@ -4,24 +4,29 @@
 const { pathname } = Astro.url;
 const isHome = pathname === "/" || pathname === "";
 
-// ナビゲーション項目: トップページ内アンカーは / からの絶対パス + #
+// base URL(プロジェクトページ運用時はサブパス、Apex運用時は "/")
+const base = import.meta.env.BASE_URL;
+// 末尾スラッシュ重複を避けるためのヘルパー
+const homePath = base;
+
+// ナビゲーション項目: トップページ内アンカーは base からの絶対パス + #
 // 会社概要は下部に控えめに配置するため、ナビでも後方に移動
 const navItems = [
-  { href: isHome ? "#services" : "/#services", label: "事業内容" },
-  { href: isHome ? "#strengths" : "/#strengths", label: "強み" },
-  { href: "/works/", label: "事例" },
-  { href: "/news/", label: "お知らせ" },
-  { href: isHome ? "#about" : "/#about", label: "会社概要" },
-  { href: isHome ? "#contact" : "/#contact", label: "お問い合わせ" },
+  { href: isHome ? "#services" : `${homePath}#services`, label: "事業内容" },
+  { href: isHome ? "#strengths" : `${homePath}#strengths`, label: "強み" },
+  { href: `${base}works/`, label: "事例" },
+  { href: `${base}news/`, label: "お知らせ" },
+  { href: isHome ? "#about" : `${homePath}#about`, label: "会社概要" },
+  { href: isHome ? "#contact" : `${homePath}#contact`, label: "お問い合わせ" },
 ];
 ---
 
 <header class="site-header" data-site-header>
   <div class="container site-header__inner">
-    <a href="/" class="site-header__logo" aria-label="GMS-Tech ホームへ">
+    <a href={base} class="site-header__logo" aria-label="GMS-Tech ホームへ">
       <img
-        src="/logo.png"
-        srcset="/logo.png 1x, /logo@2x.png 2x"
+        src={`${base}logo.png`}
+        srcset={`${base}logo.png 1x, ${base}logo@2x.png 2x`}
         alt="GMS-Tech"
         width="114"
         height="32"

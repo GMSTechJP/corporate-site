@@ -7,6 +7,7 @@ import HeroVisualA from "../components/HeroVisualA.astro";
 import HeroVisualB from "../components/HeroVisualB.astro";
 
 // Hero = データフロー図、事業内容セクション冒頭 = ダッシュボード+現場ビジュアル
+const base = import.meta.env.BASE_URL;
 
 // お知らせ・事例を取得(下書き除外、新しい順、最大3件)
 const news = (await getCollection("news", ({ data }) => !data.draft))
@@ -43,7 +44,7 @@ const formatDate = (d: Date) =>
         </p>
         <div class="hero__actions">
           <a href="#services" class="btn btn--primary">事業内容を見る</a>
-          <a href="/works/" class="btn btn--ghost">導入事例</a>
+          <a href={`${base}works/`} class="btn btn--ghost">導入事例</a>
         </div>
       </div>
       <div class="hero__visual">
@@ -148,7 +149,7 @@ const formatDate = (d: Date) =>
       <p class="eyebrow">Works</p>
       <div class="section-head">
         <h2 class="section-title">導入事例</h2>
-        <a href="/works/" class="section-head__more">すべての事例を見る →</a>
+        <a href={`${base}works/`} class="section-head__more">すべての事例を見る →</a>
       </div>
 
       {works.length === 0 ? (
@@ -157,7 +158,7 @@ const formatDate = (d: Date) =>
         <ul class="work-list">
           {works.map((w) => (
             <li class="work-card">
-              <a href={`/works/${w.slug}/`}>
+              <a href={`${base}works/${w.slug}/`}>
                 <p class="work-card__industry">{w.data.industry ?? "事例"}</p>
                 <h3>{w.data.title}</h3>
                 <p class="work-card__summary">{w.data.summary}</p>
@@ -183,7 +184,7 @@ const formatDate = (d: Date) =>
       <p class="eyebrow">News</p>
       <div class="section-head">
         <h2 class="section-title">お知らせ</h2>
-        <a href="/news/" class="section-head__more">すべて見る →</a>
+        <a href={`${base}news/`} class="section-head__more">すべて見る →</a>
       </div>
 
       {news.length === 0 ? (
@@ -192,7 +193,7 @@ const formatDate = (d: Date) =>
         <ul class="news-list">
           {news.map((n) => (
             <li>
-              <a href={`/news/${n.slug}/`}>
+              <a href={`${base}news/${n.slug}/`}>
                 <time datetime={n.data.date.toISOString()}>
                   {formatDate(n.data.date)}
                 </time>
