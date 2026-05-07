@@ -1,0 +1,155 @@
+---
+// 事例詳細ページ(動的ルート)
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection, type CollectionEntry } from "astro:content";
+
+export async function getStaticPaths() {
+  const works = await getCollection("works", ({ data }) => !data.draft);
+  return works.map((entry) => ({
+    params: { slug: entry.slug },
+    props: { entry },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"works">;
+}
+
+const { entry } = Astro.props;
+const { Content } = await entry.render();
+
+const formatDate = (d: Date) =>
+  new Intl.DateTimeFormat("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(d);
+---
+
+<BaseLayout title={entry.data.title} description={entry.data.summary}>
+  <article class="section">
+    <div class="container container-narrow">
+      <a href="/works/" class="back-link">← 事例一覧へ</a>
+
+      <header class="work-detail__header">
+        <div class="work-detail__meta">
+          {entry.data.industry && (
+            <span class="work-detail__industry">{entry.data.industry}</span>
+          )}
+          <time datetime={entry.data.date.toISOString()}>
+            {formatDate(entry.data.date)}
+          </time>
+        </div>
+        <h1>{entry.data.title}</h1>
+        <p class="work-detail__summary">{entry.data.summary}</p>
+        {entry.data.client && (
+          <p class="work-detail__client">
+            <span class="work-detail__client-label">導入先</span>
+            <span>{entry.data.client}</span>
+          </p>
+        )}
+        {entry.data.tech.length > 0 && (
+          <ul class="work-detail__tech">
+            {entry.data.tech.map((t) => <li>{t}</li>)}
+          </ul>
+        )}
+      </header>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <hr />
+
+      <a href="/works/" class="back-link">← 事例一覧へ</a>
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+  .back-link {
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+    display: inline-block;
+    margin-bottom: 1.5rem;
+  }
+
+  .back-link:hover {
+    color: var(--color-text);
+  }
+
+  .work-detail__header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .work-detail__meta {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .work-detail__industry {
+    color: var(--color-accent);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+
+  .work-detail__meta time {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+  }
+
+  .work-detail__header h1 {
+    font-size: clamp(1.75rem, 2vw + 1rem, 2.5rem);
+    margin: 0 0 0.85rem;
+  }
+
+  .work-detail__summary {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    margin: 0 0 1rem;
+  }
+
+  .work-detail__client {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0 0 1rem;
+    font-size: 0.92rem;
+    color: var(--color-text);
+  }
+
+  .work-detail__client-label {
+    display: inline-block;
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    font-size: 0.75rem;
+    padding: 0.18rem 0.55rem;
+    border-radius: 4px;
+    letter-spacing: 0.05em;
+  }
+
+  .work-detail__tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .work-detail__tech li {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--color-text-muted);
+    background: var(--color-bg-muted);
+    padding: 0.22rem 0.55rem;
+    border-radius: 4px;
+  }
+</style>

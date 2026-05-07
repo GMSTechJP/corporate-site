@@ -1,0 +1,178 @@
+---
+// Heroビジュアル案B: ダッシュボード ⇔ 現場(双方向)
+// 取得方向(青塗り): 現場のセンサー/設備の状態 → ダッシュボード
+// 制御方向(オレンジ抜き): ダッシュボードからの操作 → 現場の設備
+---
+
+<svg
+  viewBox="0 0 460 280"
+  xmlns="http://www.w3.org/2000/svg"
+  role="img"
+  aria-labelledby="hero-b-title hero-b-desc"
+  class="hero-visual"
+>
+  <title id="hero-b-title">現場とダッシュボードの双方向連携</title>
+  <desc id="hero-b-desc">
+    左側に施設のシルエットとセンサー/設備、右側にダッシュボードを配置し、
+    現場のデータがリアルタイムに可視化されると同時に、ダッシュボードから設備を遠隔・自動制御できる様子を示した図
+  </desc>
+
+  <defs>
+    <pattern id="dotsB" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1" fill="#e4e4e7"></circle>
+    </pattern>
+  </defs>
+
+  <rect width="460" height="280" fill="url(#dotsB)" opacity="0.45"></rect>
+
+  <!-- ===== 左: 現場(施設シルエット) ===== -->
+  <g transform="translate(20,50)">
+    <!-- ラベル -->
+    <text x="84" y="-12" text-anchor="middle" font-family="system-ui, -apple-system, 'Hiragino Sans', sans-serif" font-size="11" fill="#888780" letter-spacing="0.5">現場</text>
+
+    <!-- 施設の輪郭(温泉施設のような形を簡略化) -->
+    <!-- ベース建物 -->
+    <rect x="10" y="60" width="150" height="100" rx="3" fill="white" stroke="#c8c8cf" stroke-width="1.2"></rect>
+    <!-- 屋根/破風 -->
+    <polygon points="10,60 85,18 160,60" fill="white" stroke="#c8c8cf" stroke-width="1.2"></polygon>
+    <!-- 入口 -->
+    <rect x="74" y="120" width="22" height="40" fill="#f7f7f8" stroke="#c8c8cf" stroke-width="1"></rect>
+    <!-- 窓 -->
+    <rect x="22" y="78" width="18" height="14" fill="#eef2ff"></rect>
+    <rect x="46" y="78" width="18" height="14" fill="#eef2ff"></rect>
+    <rect x="106" y="78" width="18" height="14" fill="#eef2ff"></rect>
+    <rect x="130" y="78" width="18" height="14" fill="#eef2ff"></rect>
+
+    <!-- センサー1: 入口上(カメラ) -->
+    <g transform="translate(80,108)">
+      <circle r="6" fill="white" stroke="#1d4ed8" stroke-width="1.6"></circle>
+      <circle r="2.5" fill="#1d4ed8">
+        <animate attributeName="opacity" values="1;0.3;1" dur="2.4s" repeatCount="indefinite"></animate>
+      </circle>
+    </g>
+    <!-- センサー2: 屋根角(人感) -->
+    <g transform="translate(38,52)">
+      <circle r="5" fill="white" stroke="#1d4ed8" stroke-width="1.6"></circle>
+      <circle r="2" fill="#1d4ed8">
+        <animate attributeName="r" values="2;4;2" dur="3s" repeatCount="indefinite"></animate>
+        <animate attributeName="opacity" values="1;0.2;1" dur="3s" repeatCount="indefinite"></animate>
+      </circle>
+    </g>
+    <!-- センサー3: 屋根角(温度) -->
+    <g transform="translate(132,52)">
+      <circle r="5" fill="white" stroke="#1d4ed8" stroke-width="1.6"></circle>
+      <circle r="2" fill="#1d4ed8">
+        <animate attributeName="opacity" values="1;0.4;1" dur="2.7s" repeatCount="indefinite" begin="0.3s"></animate>
+      </circle>
+    </g>
+    <!-- 設備: エアコン/照明など制御対象 (入口横) -->
+    <g transform="translate(105,140)">
+      <rect x="-7" y="-5" width="14" height="10" rx="2" fill="#fff7ed" stroke="#d97706" stroke-width="1.4"></rect>
+      <line x1="-5" y1="-2" x2="5" y2="-2" stroke="#d97706" stroke-width="0.8" opacity="0.7"></line>
+      <line x1="-5" y1="0" x2="5" y2="0" stroke="#d97706" stroke-width="0.8" opacity="0.7"></line>
+      <line x1="-5" y1="2" x2="3" y2="2" stroke="#d97706" stroke-width="0.8" opacity="0.7"></line>
+    </g>
+  </g>
+
+  <!-- ===== 中央: 双方向データフロー線 ===== -->
+  <g>
+    <line x1="200" y1="130" x2="270" y2="130" stroke="#c8c8cf" stroke-width="1.2" stroke-dasharray="3 3"></line>
+    <line x1="200" y1="170" x2="270" y2="170" stroke="#c8c8cf" stroke-width="1.2" stroke-dasharray="3 3"></line>
+
+    <!-- 取得方向のドット (青塗り、現場 → ダッシュボード) -->
+    <circle r="3" fill="#1d4ed8">
+      <animateMotion dur="2.4s" repeatCount="indefinite" path="M200,130 L270,130"></animateMotion>
+    </circle>
+    <circle r="3" fill="#1d4ed8">
+      <animateMotion dur="2.8s" begin="0.7s" repeatCount="indefinite" path="M200,170 L270,170"></animateMotion>
+    </circle>
+    <!-- 制御方向のドット (オレンジ抜き、ダッシュボード → 現場) -->
+    <circle r="3" fill="white" stroke="#d97706" stroke-width="1.6">
+      <animateMotion dur="3.0s" begin="1.4s" repeatCount="indefinite" path="M270,130 L200,130"></animateMotion>
+    </circle>
+    <circle r="3" fill="white" stroke="#d97706" stroke-width="1.6">
+      <animateMotion dur="3.2s" begin="0.4s" repeatCount="indefinite" path="M270,170 L200,170"></animateMotion>
+    </circle>
+  </g>
+
+  <!-- ===== 右: ダッシュボード ===== -->
+  <g transform="translate(270,40)">
+    <!-- ラベル -->
+    <text x="85" y="-2" text-anchor="middle" font-family="system-ui, -apple-system, 'Hiragino Sans', sans-serif" font-size="11" fill="#888780" letter-spacing="0.5">ダッシュボード</text>
+
+    <!-- パネル本体 -->
+    <rect x="0" y="10" width="170" height="200" rx="8" fill="white" stroke="#c8c8cf" stroke-width="1.2"></rect>
+
+    <!-- ヘッダー -->
+    <line x1="14" y1="32" x2="100" y2="32" stroke="#111114" stroke-width="1.6" stroke-linecap="round"></line>
+    <line x1="14" y1="40" x2="74" y2="40" stroke="#888780" stroke-width="1.2"></line>
+    <line x1="0" y1="50" x2="170" y2="50" stroke="#e4e4e7" stroke-width="1"></line>
+
+    <!-- メトリクスカード(2列) -->
+    <g transform="translate(14,60)">
+      <rect width="68" height="40" rx="5" fill="#f7f7f8" stroke="#e4e4e7" stroke-width="1"></rect>
+      <line x1="8" y1="13" x2="40" y2="13" stroke="#888780" stroke-width="1"></line>
+      <text x="8" y="30" font-family="system-ui, -apple-system, 'Hiragino Sans', sans-serif" font-size="14" font-weight="700" fill="#111114">42</text>
+      <text x="34" y="30" font-family="system-ui, -apple-system, 'Hiragino Sans', sans-serif" font-size="9" fill="#888780">/ 60</text>
+    </g>
+    <g transform="translate(88,60)">
+      <rect width="68" height="40" rx="5" fill="#eef2ff" stroke="#c7d2fe" stroke-width="1"></rect>
+      <line x1="8" y1="13" x2="36" y2="13" stroke="#1d4ed8" stroke-width="1" opacity="0.6"></line>
+      <text x="8" y="30" font-family="system-ui, -apple-system, 'Hiragino Sans', sans-serif" font-size="14" font-weight="700" fill="#1d4ed8">OK</text>
+    </g>
+
+    <!-- グラフ -->
+    <g transform="translate(14,110)">
+      <rect width="142" height="56" rx="5" fill="white" stroke="#e4e4e7" stroke-width="1"></rect>
+      <!-- 折れ線 -->
+      <polyline
+        points="8,44 26,38 44,40 62,28 80,26 98,18 116,20 134,12"
+        fill="none"
+        stroke="#1d4ed8"
+        stroke-width="1.6"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      ></polyline>
+      <!-- 折れ線下の薄塗り -->
+      <polygon
+        points="8,44 26,38 44,40 62,28 80,26 98,18 116,20 134,12 134,50 8,50"
+        fill="#1d4ed8"
+        opacity="0.08"
+      ></polygon>
+      <!-- 終点ドット -->
+      <circle cx="134" cy="12" r="3" fill="#1d4ed8">
+        <animate attributeName="r" values="3;5;3" dur="1.8s" repeatCount="indefinite"></animate>
+        <animate attributeName="opacity" values="1;0.3;1" dur="1.8s" repeatCount="indefinite"></animate>
+      </circle>
+    </g>
+
+    <!-- 制御スイッチ風UI (ダッシュボードから設備を操作するイメージ) -->
+    <g transform="translate(14,176)">
+      <line x1="0" y1="0" x2="142" y2="0" stroke="#e4e4e7" stroke-width="1"></line>
+      <!-- 行1: 設備A 「ON」 -->
+      <text x="0" y="14" font-family="system-ui, -apple-system, 'Hiragino Sans', sans-serif" font-size="9" fill="#888780">設備A</text>
+      <rect x="100" y="6" width="20" height="10" rx="5" fill="#d97706"></rect>
+      <circle cx="115" cy="11" r="4" fill="white"></circle>
+      <!-- 行2: 設備B 「OFF」 -->
+      <text x="0" y="32" font-family="system-ui, -apple-system, 'Hiragino Sans', sans-serif" font-size="9" fill="#888780">設備B</text>
+      <rect x="100" y="24" width="20" height="10" rx="5" fill="#c8c8cf"></rect>
+      <circle cx="105" cy="29" r="4" fill="white"></circle>
+    </g>
+  </g>
+</svg>
+
+<style>
+  .hero-visual {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero-visual circle,
+    .hero-visual rect,
+    .hero-visual polyline {
+      animation: none !important;
+    }
+  }
+</style>

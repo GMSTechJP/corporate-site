@@ -1,0 +1,151 @@
+---
+// 事例一覧ページ
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const works = (await getCollection("works", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const formatDate = (d: Date) =>
+  new Intl.DateTimeFormat("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(d);
+---
+
+<BaseLayout
+  title="導入事例"
+  description="GMS-Techが実際にお客様の現場に導入したIoTシステムの事例をご紹介します。"
+>
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">Works</p>
+      <h1 class="section-title">導入事例</h1>
+      <p class="section-lead">
+        実際にお客様の現場で稼働しているIoTシステムの一部をご紹介します。
+      </p>
+
+      {works.length === 0 ? (
+        <p>掲載できる事例はまだありません。</p>
+      ) : (
+        <ul class="works-grid">
+          {works.map((w) => (
+            <li class="work-item">
+              <a href={`/works/${w.slug}/`}>
+                <div class="work-item__meta">
+                  <span class="work-item__industry">
+                    {w.data.industry ?? "事例"}
+                  </span>
+                  <time datetime={w.data.date.toISOString()}>
+                    {formatDate(w.data.date)}
+                  </time>
+                </div>
+                <h2>{w.data.title}</h2>
+                <p>{w.data.summary}</p>
+                {w.data.client && (
+                  <p class="work-item__client">導入先：{w.data.client}</p>
+                )}
+                {w.data.tech.length > 0 && (
+                  <ul class="work-item__tech">
+                    {w.data.tech.map((t) => <li>{t}</li>)}
+                  </ul>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .work-item {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .work-item:hover {
+    border-color: var(--color-text);
+    transform: translateY(-2px);
+  }
+
+  .work-item a {
+    display: block;
+    padding: 2rem;
+  }
+
+  .work-item__meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+  }
+
+  .work-item__industry {
+    color: var(--color-accent);
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+  }
+
+  .work-item__meta time {
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--color-text-muted);
+  }
+
+  .work-item h2 {
+    font-size: 1.2rem;
+    margin: 0 0 0.6rem;
+  }
+
+  .work-item p {
+    color: var(--color-text-muted);
+    margin: 0 0 1rem;
+    font-size: 0.95rem;
+  }
+
+  .work-item__client {
+    margin: 0 0 0.75rem !important;
+    font-size: 0.85rem !important;
+    color: var(--color-text) !important;
+  }
+
+  .work-item__tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .work-item__tech li {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    background: var(--color-bg-muted);
+    padding: 0.18rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 768px) {
+    .works-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

@@ -1,0 +1,82 @@
+---
+// ベースレイアウト: 全ページ共通の HTML 骨組み
+// HEADタグ、ヘッダー、フッターを共通化する
+import "../styles/global.css";
+import SiteHeader from "../components/SiteHeader.astro";
+import SiteFooter from "../components/SiteFooter.astro";
+
+interface Props {
+  /** ページタイトル(タブやOGに反映) */
+  title: string;
+  /** 説明文(meta description / OG description) */
+  description?: string;
+  /** OG画像のパス(省略時はデフォルト) */
+  ogImage?: string;
+}
+
+const {
+  title,
+  description = "合同会社GMS-Tech は、ニッチな現場のDX推進を支援する技術会社です。中小規模の施設や研究開発現場に、無理なく使えるIoTを構築しています。",
+  ogImage,
+} = Astro.props;
+
+const siteName = "合同会社GMS-Tech";
+const fullTitle = title === siteName ? title : `${title} | ${siteName}`;
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).toString();
+const ogImageURL = ogImage
+  ? new URL(ogImage, Astro.site).toString()
+  : new URL("/og-image.png", Astro.site).toString();
+---
+
+<!doctype html>
+<html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:image" content={ogImageURL} />
+    <meta property="og:locale" content="ja_JP" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImageURL} />
+  </head>
+  <body>
+    <a href="#main" class="skip-link">本文へスキップ</a>
+    <SiteHeader />
+    <main id="main">
+      <slot />
+    </main>
+    <SiteFooter />
+
+    <style>
+      .skip-link {
+        position: absolute;
+        top: -40px;
+        left: 0;
+        background: var(--color-text);
+        color: var(--color-bg);
+        padding: 0.5rem 1rem;
+        z-index: 100;
+        transition: top 0.2s ease;
+      }
+      .skip-link:focus {
+        top: 0;
+      }
+    </style>
+  </body>
+</html>

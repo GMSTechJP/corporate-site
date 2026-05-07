@@ -1,0 +1,101 @@
+---
+// サイト共通フッター
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container site-footer__inner">
+    <div class="site-footer__brand">
+      <img
+        src="/logo.png"
+        srcset="/logo.png 1x, /logo@2x.png 2x"
+        alt="GMS-Tech"
+        width="114"
+        height="32"
+      />
+      <p class="site-footer__address">
+        合同会社GMS-Tech<br />
+        〒150-0002 東京都渋谷区渋谷2-19-15<br />
+        宮益坂ビルディング609
+      </p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="フッターナビゲーション">
+      <ul>
+        <li><a href="/#services">事業内容</a></li>
+        <li><a href="/#strengths">強み</a></li>
+        <li><a href="/works/">事例</a></li>
+        <li><a href="/news/">お知らせ</a></li>
+        <li><a href="/#about">会社概要</a></li>
+        <li><a href="/#contact">お問い合わせ</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <div class="container site-footer__copyright">
+    <small>© {year} 合同会社GMS-Tech. All rights reserved.</small>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 4rem;
+    padding: 3rem 0 1.5rem;
+    border-top: 1px solid var(--color-border);
+    background: var(--color-bg-subtle);
+    color: var(--color-text-muted);
+    font-size: 0.9rem;
+  }
+
+  .site-footer__inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2.5rem;
+    align-items: start;
+  }
+
+  .site-footer__brand img {
+    height: 28px;
+    margin-bottom: 1rem;
+  }
+
+  .site-footer__address {
+    margin: 0;
+    line-height: 1.8;
+  }
+
+  .site-footer__nav ul {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4rem 1.5rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .site-footer__nav a {
+    color: var(--color-text-muted);
+  }
+
+  .site-footer__nav a:hover {
+    color: var(--color-text);
+  }
+
+  .site-footer__copyright {
+    margin-top: 2.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--color-border);
+    color: var(--color-text-soft);
+  }
+
+  @media (max-width: 640px) {
+    .site-footer__inner {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+
+    .site-footer__nav ul {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+</style>

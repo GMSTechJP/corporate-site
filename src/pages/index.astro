@@ -1,0 +1,850 @@
+---
+// トップページ: 1ページLP
+// セクション: Hero / About / Services / Strengths / Works / News / Contact
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+import HeroVisualA from "../components/HeroVisualA.astro";
+import HeroVisualB from "../components/HeroVisualB.astro";
+
+// Hero = データフロー図、事業内容セクション冒頭 = ダッシュボード+現場ビジュアル
+
+// お知らせ・事例を取得(下書き除外、新しい順、最大3件)
+const news = (await getCollection("news", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const works = (await getCollection("works", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+// 日付フォーマッタ
+const formatDate = (d: Date) =>
+  new Intl.DateTimeFormat("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(d);
+---
+
+<BaseLayout title="合同会社GMS-Tech">
+  <!-- ===== Hero ===== -->
+  <section class="hero">
+    <div class="container hero__inner">
+      <div class="hero__copy fade-in">
+        <p class="eyebrow eyebrow--accent">GMS-Tech / IoT for niche fields</p>
+        <h1 class="hero__title">
+          ニッチな現場の<br />
+          DX推進を、<span class="hero__accent">技術で支える。</span>
+        </h1>
+        <p class="hero__lead">
+          大手のフルサービスは過剰、専任ITスタッフを置くのが困難な、<br
+            class="lg-only"
+          />中小規模の施設や研究開発現場に、無理なく使えるIoTを構築しています。
+        </p>
+        <div class="hero__actions">
+          <a href="#services" class="btn btn--primary">事業内容を見る</a>
+          <a href="/works/" class="btn btn--ghost">導入事例</a>
+        </div>
+      </div>
+      <div class="hero__visual">
+        <HeroVisualA />
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Services ===== -->
+  <section id="services" class="section">
+    <div class="container">
+      <p class="eyebrow">Services</p>
+      <h2 class="section-title">事業内容</h2>
+      <p class="section-lead">
+        現場運用を変えずに導入できるIoTを、3つのアプローチでご提供しています。
+      </p>
+
+      <!-- 価値の可視化: 現場 → ダッシュボード -->
+      <div class="services-visual">
+        <div class="services-visual__svg">
+          <HeroVisualB />
+        </div>
+        <p class="services-visual__caption">
+          現場とダッシュボードを双方向につなぎ、状況の<strong>可視化</strong>と設備の<strong>遠隔・自動制御</strong>を、お客様の事業に合わせてつくります。
+        </p>
+      </div>
+
+      <div class="service-grid">
+        <article class="service-card">
+          <span class="service-card__num">01</span>
+          <h3>中小規模施設のIoT導入支援</h3>
+          <p>
+            設備の自動化や接客オペレーションの効率化を、現場運用を変えずに実現。<br
+            />ホテル・宿泊業・小売・公共施設などのスモールDXを得意としています。
+          </p>
+        </article>
+
+        <article class="service-card">
+          <span class="service-card__num">02</span>
+          <h3>研究開発設備のIoT導入支援</h3>
+          <p>
+            実験・計測装置の自動化と、データ収集・遠隔監視の仕組みづくり。<br
+            />既存装置と現場ワークフローを尊重した、控えめな自動化を提案します。
+          </p>
+        </article>
+
+        <article class="service-card">
+          <span class="service-card__num">03</span>
+          <h3>ゲストエンジニアリング</h3>
+          <p>
+            準委任契約のもと、お客様のDXプロジェクトに常駐して技術支援。<br
+            />エッジ〜クラウドまでをひとりでカバーできる人材として参画します。
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Strengths ===== -->
+  <section id="strengths" class="section section--alt">
+    <div class="container">
+      <p class="eyebrow">Strengths</p>
+      <h2 class="section-title">私たちの強み</h2>
+      <p class="section-lead">
+        小さな技術会社だからこそできる、現場に寄り添った3つの強みがあります。
+      </p>
+
+      <div class="strength-grid">
+        <article class="strength-card">
+          <h3>
+            <span class="strength-card__num">01</span>スモールスタート
+          </h3>
+          <p>
+            必要なところから小さく始められます。フルシステム導入は不要で、効果を確認しながら段階的に拡張可能です。
+          </p>
+        </article>
+
+        <article class="strength-card">
+          <h3>
+            <span class="strength-card__num">02</span>現場で使える運用設計
+          </h3>
+          <p>
+            専任IT担当がいなくても運用できる設計。シンプルな画面、音声通知、自動レポートなど、現場の方の負荷を増やさない仕組みを徹底しています。
+          </p>
+        </article>
+
+        <article class="strength-card">
+          <h3>
+            <span class="strength-card__num">03</span>既設活用・ベンダーフリー
+          </h3>
+          <p>
+            いまある設備とシステムを活かして投資を最小化。特定メーカーに縛られにくい柔軟な構成で、長期運用にも耐えるシステムを構築します。
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Works ===== -->
+  <section id="works" class="section">
+    <div class="container">
+      <p class="eyebrow">Works</p>
+      <div class="section-head">
+        <h2 class="section-title">導入事例</h2>
+        <a href="/works/" class="section-head__more">すべての事例を見る →</a>
+      </div>
+
+      {works.length === 0 ? (
+        <p class="muted">まだ公開できる事例がありません。</p>
+      ) : (
+        <ul class="work-list">
+          {works.map((w) => (
+            <li class="work-card">
+              <a href={`/works/${w.slug}/`}>
+                <p class="work-card__industry">{w.data.industry ?? "事例"}</p>
+                <h3>{w.data.title}</h3>
+                <p class="work-card__summary">{w.data.summary}</p>
+                {w.data.client && (
+                  <p class="work-card__client">導入先：{w.data.client}</p>
+                )}
+                {w.data.tech.length > 0 && (
+                  <ul class="work-card__tech">
+                    {w.data.tech.map((t) => <li>{t}</li>)}
+                  </ul>
+                )}
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+
+  <!-- ===== News ===== -->
+  <section id="news" class="section section--alt">
+    <div class="container">
+      <p class="eyebrow">News</p>
+      <div class="section-head">
+        <h2 class="section-title">お知らせ</h2>
+        <a href="/news/" class="section-head__more">すべて見る →</a>
+      </div>
+
+      {news.length === 0 ? (
+        <p class="muted">現在お知らせはありません。</p>
+      ) : (
+        <ul class="news-list">
+          {news.map((n) => (
+            <li>
+              <a href={`/news/${n.slug}/`}>
+                <time datetime={n.data.date.toISOString()}>
+                  {formatDate(n.data.date)}
+                </time>
+                <span class="news-list__cat">{n.data.category}</span>
+                <span class="news-list__title">{n.data.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+
+  <!-- ===== About (控えめに後方配置) ===== -->
+  <section id="about" class="section about-section">
+    <div class="container">
+      <div class="about-block">
+        <header class="about-block__head">
+          <p class="eyebrow">About</p>
+          <h2>会社概要</h2>
+        </header>
+        <dl class="about-block__table">
+          <div>
+            <dt>会社名</dt>
+            <dd>合同会社GMS-Tech</dd>
+          </div>
+          <div>
+            <dt>代表</dt>
+            <dd>武藤 剛</dd>
+          </div>
+          <div>
+            <dt>所在地</dt>
+            <dd>
+              〒150-0002 東京都渋谷区渋谷2-19-15<br />宮益坂ビルディング609
+            </dd>
+          </div>
+          <div>
+            <dt>事業内容</dt>
+            <dd>IoTシステム開発・現場DX支援・受託エンジニアリング</dd>
+          </div>
+          <div>
+            <dt>得意領域</dt>
+            <dd>
+              Raspberry Pi / NVIDIA Jetson / M5Stack / Node-RED /
+              LabVIEW / Amazon Web Services
+            </dd>
+          </div>
+          <div>
+            <dt>主要取引先<span class="about-block__sub">（敬称略）</span></dt>
+            <dd>
+              株式会社陣屋コネクト<br />
+              有限会社西湘建設<br />
+              有限会社吉川電設<br />
+              <span class="about-block__et-al">ほか 自動車部品メーカー</span>
+            </dd>
+          </div>
+          <div>
+            <dt>取引銀行</dt>
+            <dd>三井住友銀行 渋谷駅前支店</dd>
+          </div>
+        </dl>
+        <p class="about-block__notice">
+          ※ 本ページに記載されている会社名・製品名・サービス名は、各社の商標または登録商標です。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== Contact ===== -->
+  <section id="contact" class="section section--alt">
+    <div class="container container-narrow">
+      <p class="eyebrow">Contact</p>
+      <h2 class="section-title">お問い合わせについて</h2>
+      <div class="contact-note">
+        <p>
+          現在、<strong>新規のお問い合わせ受付を一時的に停止しております</strong>。
+        </p>
+        <p>
+          少人数体制のため、すでにご契約いただいているお客様への対応で手一杯となっており、新規のご相談・お見積もり・採用に関するお問い合わせには十分にお応えできない状況です。
+        </p>
+        <p>
+          また状況が落ち着き次第、本ページにて受付再開のお知らせを掲載いたします。<br
+          />ご理解のほどよろしくお願い申し上げます。
+        </p>
+        <p class="contact-note__sign">合同会社GMS-Tech 代表 武藤 剛</p>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    padding: clamp(3rem, 7vw, 6rem) 0 clamp(3.5rem, 8vw, 7rem);
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(60% 40% at 80% 0%, rgba(29, 78, 216, 0.06), transparent 70%),
+      linear-gradient(180deg, transparent 0, rgba(29, 78, 216, 0.02) 100%);
+    pointer-events: none;
+  }
+
+  .hero__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 3rem;
+    align-items: center;
+  }
+
+  .hero__title {
+    font-size: clamp(2rem, 3.5vw + 1rem, 3.5rem);
+    line-height: 1.25;
+    margin: 0 0 1.25rem;
+    letter-spacing: -0.01em;
+  }
+
+  .hero__accent {
+    color: var(--color-accent);
+    /* 「技術で支える。」を中で折り返さない(日本語禁則対策) */
+    white-space: nowrap;
+  }
+
+  .hero__lead {
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
+    max-width: 50ch;
+    margin: 0 0 2rem;
+  }
+
+  .hero__actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  /* Hero ビジュアル(ブランドロゴをセンターに、背景に幾何学アクセント) */
+  .hero__visual {
+    position: relative;
+    aspect-ratio: 5 / 4;
+    width: 100%;
+    max-width: 460px;
+    justify-self: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* 大きく表示するロゴ */
+  .hero__logo {
+    position: relative;
+    z-index: 2;
+    width: min(92%, 420px);
+    height: auto;
+    filter: drop-shadow(0 6px 18px rgba(17, 17, 20, 0.08));
+  }
+
+  /* 背景の控えめなドット/グリッド */
+  .hero__grid {
+    position: absolute;
+    inset: 14% 8%;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 16px;
+    z-index: 0;
+    opacity: 0.55;
+  }
+
+  .hero__grid span {
+    background: var(--color-bg-muted);
+    border-radius: 50%;
+  }
+
+  .hero__grid span:nth-child(5),
+  .hero__grid span:nth-child(11) {
+    background: var(--color-accent);
+    opacity: 0.35;
+  }
+
+  /* ロゴの背後で淡くパルスする円(ブランドの存在感を演出) */
+  .hero__pulse {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 70%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: radial-gradient(
+      circle,
+      rgba(29, 78, 216, 0.08) 0%,
+      rgba(29, 78, 216, 0) 70%
+    );
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    animation: pulse 3.6s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%,
+    100% {
+      transform: translate(-50%, -50%) scale(0.92);
+      opacity: 0.7;
+    }
+    50% {
+      transform: translate(-50%, -50%) scale(1.05);
+      opacity: 1;
+    }
+  }
+
+  .lg-only {
+    display: inline;
+  }
+
+  @media (max-width: 900px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+    .hero__visual {
+      order: -1;
+      max-width: 280px;
+    }
+    .lg-only {
+      display: none;
+    }
+  }
+
+  /* ---------- About (控えめなスタイル、ページ後方配置) ---------- */
+  .about-section {
+    padding-top: 2.5rem;
+    padding-bottom: 2.5rem;
+  }
+
+  .about-block {
+    display: grid;
+    grid-template-columns: minmax(0, 220px) 1fr;
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .about-block__head .eyebrow {
+    margin-bottom: 0.25rem;
+  }
+
+  .about-block__head h2 {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--color-text);
+  }
+
+  .about-block__table {
+    margin: 0;
+    display: grid;
+    gap: 0;
+    font-size: 0.92rem;
+  }
+
+  .about-block__table > div {
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 1rem;
+    padding: 0.65rem 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .about-block__table > div:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .about-block__table dt {
+    font-weight: 600;
+    color: var(--color-text-muted);
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+  .about-block__sub {
+    display: inline-block;
+    margin-left: 0.25em;
+    font-weight: 400;
+    font-size: 0.78em;
+    color: var(--color-text-soft);
+  }
+
+  .about-block__et-al {
+    color: var(--color-text-muted);
+    font-size: 0.92em;
+  }
+
+  .about-block__table dd {
+    margin: 0;
+    color: var(--color-text);
+    line-height: 1.7;
+  }
+
+  .about-block__notice {
+    grid-column: 2 / -1;
+    margin: 1rem 0 0;
+    font-size: 0.78rem;
+    color: var(--color-text-soft);
+  }
+
+  @media (max-width: 768px) {
+    .about-block {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+
+    .about-block__notice {
+      grid-column: 1 / -1;
+    }
+
+    .about-block__table > div {
+      grid-template-columns: 100px 1fr;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .about-block__table > div {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+  }
+
+  /* ---------- Services ---------- */
+  .services-visual {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    align-items: center;
+    gap: 1.5rem;
+    margin: 0.5rem 0 2rem;
+    padding: 1rem 1.25rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .services-visual__svg {
+    display: block;
+  }
+
+  .services-visual :global(svg.hero-visual) {
+    width: 100%;
+    max-width: 440px;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .services-visual__caption {
+    font-size: 0.95rem;
+    color: var(--color-text-muted);
+    margin: 0;
+    line-height: 1.75;
+  }
+
+  @media (max-width: 768px) {
+    .services-visual {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+      padding: 1rem;
+    }
+
+    .services-visual__caption {
+      text-align: center;
+    }
+  }
+
+  .service-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .service-card {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 2rem 1.75rem;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .service-card:hover {
+    border-color: var(--color-text);
+    transform: translateY(-2px);
+  }
+
+  .service-card__num {
+    display: inline-block;
+    font-family: var(--font-mono);
+    color: var(--color-accent);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+  }
+
+  .service-card h3 {
+    font-size: 1.15rem;
+    margin-bottom: 0.85rem;
+  }
+
+  .service-card p {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .service-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- Strengths ---------- */
+  .strength-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
+
+  .strength-card {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+  }
+
+  .strength-card h3 {
+    font-size: 1.1rem;
+    display: flex;
+    align-items: baseline;
+    gap: 0.6rem;
+    margin-bottom: 0.75rem;
+  }
+
+  .strength-card__num {
+    font-family: var(--font-mono);
+    color: var(--color-text-soft);
+    font-size: 0.9rem;
+    font-weight: 700;
+  }
+
+  .strength-card p {
+    color: var(--color-text-muted);
+    font-size: 0.95rem;
+    margin: 0;
+  }
+
+  @media (max-width: 900px) {
+    .strength-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- Section head ---------- */
+  .section-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .section-head .section-title {
+    margin: 0;
+  }
+
+  .section-head__more {
+    color: var(--color-accent);
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+
+  .section-head__more:hover {
+    color: var(--color-accent-hover);
+    text-decoration: underline;
+  }
+
+  /* ---------- Works ---------- */
+  .work-list {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .work-card {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    transition: border-color 0.2s ease, transform 0.2s ease;
+  }
+
+  .work-card:hover {
+    border-color: var(--color-text);
+    transform: translateY(-2px);
+  }
+
+  .work-card a {
+    display: block;
+    padding: 1.5rem 1.5rem 1.75rem;
+  }
+
+  .work-card__industry {
+    display: inline-block;
+    font-size: 0.78rem;
+    color: var(--color-accent);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    margin: 0 0 0.5rem;
+  }
+
+  .work-card h3 {
+    font-size: 1.05rem;
+    margin: 0 0 0.6rem;
+  }
+
+  .work-card__summary {
+    font-size: 0.92rem;
+    color: var(--color-text-muted);
+    margin: 0 0 0.6rem;
+  }
+
+  .work-card__client {
+    font-size: 0.8rem;
+    color: var(--color-text);
+    margin: 0 0 0.75rem;
+  }
+
+  .work-card__tech {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .work-card__tech li {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+    background: var(--color-bg-muted);
+    padding: 0.18rem 0.5rem;
+    border-radius: 4px;
+  }
+
+  @media (max-width: 900px) {
+    .work-list {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* ---------- News ---------- */
+  .news-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .news-list li {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .news-list a {
+    display: grid;
+    grid-template-columns: 110px 90px 1fr;
+    gap: 1.25rem;
+    align-items: baseline;
+    padding: 1rem 0;
+    transition: color 0.15s ease;
+  }
+
+  .news-list a:hover .news-list__title {
+    color: var(--color-accent);
+  }
+
+  .news-list time {
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    color: var(--color-text-muted);
+  }
+
+  .news-list__cat {
+    font-size: 0.75rem;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    padding: 0.2rem 0.55rem;
+    border-radius: 4px;
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+
+  .news-list__title {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  @media (max-width: 640px) {
+    .news-list a {
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+      padding: 0.85rem 0;
+    }
+    .news-list__cat {
+      justify-self: start;
+    }
+  }
+
+  /* ---------- Contact ---------- */
+  .contact-note {
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: 2rem 2.25rem;
+    margin-top: 1rem;
+  }
+
+  .contact-note p {
+    color: var(--color-text-muted);
+    line-height: 1.85;
+  }
+
+  .contact-note p:last-child {
+    margin-bottom: 0;
+  }
+
+  .contact-note strong {
+    color: var(--color-text);
+  }
+
+  .contact-note__sign {
+    margin-top: 1.5rem;
+    text-align: right;
+    font-size: 0.92rem;
+  }
+
+  .muted {
+    color: var(--color-text-muted);
+  }
+</style>

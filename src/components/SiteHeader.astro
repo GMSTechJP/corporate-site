@@ -1,0 +1,224 @@
+---
+// サイト共通ヘッダー
+// シンプルでミニマル。スクロールしても背景が透けるほど薄い影だけ付く
+const { pathname } = Astro.url;
+const isHome = pathname === "/" || pathname === "";
+
+// ナビゲーション項目: トップページ内アンカーは / からの絶対パス + #
+// 会社概要は下部に控えめに配置するため、ナビでも後方に移動
+const navItems = [
+  { href: isHome ? "#services" : "/#services", label: "事業内容" },
+  { href: isHome ? "#strengths" : "/#strengths", label: "強み" },
+  { href: "/works/", label: "事例" },
+  { href: "/news/", label: "お知らせ" },
+  { href: isHome ? "#about" : "/#about", label: "会社概要" },
+  { href: isHome ? "#contact" : "/#contact", label: "お問い合わせ" },
+];
+---
+
+<header class="site-header" data-site-header>
+  <div class="container site-header__inner">
+    <a href="/" class="site-header__logo" aria-label="GMS-Tech ホームへ">
+      <img
+        src="/logo.png"
+        srcset="/logo.png 1x, /logo@2x.png 2x"
+        alt="GMS-Tech"
+        width="114"
+        height="32"
+      />
+    </a>
+
+    <button
+      class="site-header__menu-btn"
+      type="button"
+      aria-expanded="false"
+      aria-controls="site-nav"
+      data-menu-btn
+    >
+      <span class="visually-hidden">メニューを開く</span>
+      <span class="bar" aria-hidden="true"></span>
+      <span class="bar" aria-hidden="true"></span>
+      <span class="bar" aria-hidden="true"></span>
+    </button>
+
+    <nav id="site-nav" class="site-header__nav" data-site-nav>
+      <ul>
+        {
+          navItems.map((item) => (
+            <li>
+              <a href={item.href}>{item.label}</a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    /* 左(ロゴ側)は白、右(ナビ側)はカンパニーカラーのグラデーション */
+    background: linear-gradient(
+      to right,
+      #ffffff 0%,
+      #ffffff 24%,
+      var(--color-brand) 56%,
+      var(--color-brand) 100%
+    );
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+    color: #ffffff;
+  }
+
+  .site-header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 64px;
+  }
+
+  .site-header__logo img {
+    height: 28px;
+    width: auto;
+    /* グラデーション左側(白エリア)に配置するためオリジナル色のまま */
+    transition: opacity 0.15s ease;
+  }
+
+  .site-header__logo:hover img {
+    opacity: 0.85;
+  }
+
+  .site-header__nav ul {
+    display: flex;
+    align-items: center;
+    gap: 1.75rem;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .site-header__nav a {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+    transition: color 0.15s ease;
+  }
+
+  .site-header__nav a:hover {
+    color: #ffffff;
+  }
+
+  .site-header__menu-btn {
+    display: none;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    border-radius: var(--radius);
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .site-header__menu-btn .bar {
+    display: block;
+    position: absolute;
+    left: 50%;
+    width: 18px;
+    height: 1.5px;
+    background: #ffffff;
+    transform: translateX(-50%);
+    transition: transform 0.2s ease, opacity 0.2s ease, top 0.2s ease;
+  }
+
+  .site-header__menu-btn .bar:nth-child(2) { top: 14px; }
+  .site-header__menu-btn .bar:nth-child(3) { top: 19px; }
+  .site-header__menu-btn .bar:nth-child(4) { top: 24px; }
+
+  .site-header__menu-btn[aria-expanded="true"] .bar:nth-child(2) {
+    top: 19px;
+    transform: translateX(-50%) rotate(45deg);
+  }
+  .site-header__menu-btn[aria-expanded="true"] .bar:nth-child(3) {
+    opacity: 0;
+  }
+  .site-header__menu-btn[aria-expanded="true"] .bar:nth-child(4) {
+    top: 19px;
+    transform: translateX(-50%) rotate(-45deg);
+  }
+
+  /* モバイル */
+  @media (max-width: 768px) {
+    .site-header__menu-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .site-header__nav {
+      position: absolute;
+      top: 64px;
+      left: 0;
+      right: 0;
+      background: var(--color-brand);
+      border-bottom: 1px solid var(--color-brand-dark);
+      padding: 1rem 1.5rem 1.5rem;
+      transform: translateY(-12px);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .site-header__nav.is-open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .site-header__nav ul {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+    }
+
+    .site-header__nav li {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+    }
+
+    .site-header__nav li:last-child {
+      border-bottom: 0;
+    }
+
+    .site-header__nav a {
+      display: block;
+      padding: 0.85rem 0;
+      font-size: 1rem;
+    }
+  }
+</style>
+
+<script>
+  // モバイルメニュー開閉
+  const btn = document.querySelector<HTMLButtonElement>("[data-menu-btn]");
+  const nav = document.querySelector<HTMLElement>("[data-site-nav]");
+
+  if (btn && nav) {
+    btn.addEventListener("click", () => {
+      const isOpen = btn.getAttribute("aria-expanded") === "true";
+      btn.setAttribute("aria-expanded", String(!isOpen));
+      nav.classList.toggle("is-open", !isOpen);
+    });
+
+    // ナビゲーション内のリンククリックで閉じる
+    nav.addEventListener("click", (e) => {
+      const target = e.target as HTMLElement;
+      if (target.tagName === "A") {
+        btn.setAttribute("aria-expanded", "false");
+        nav.classList.remove("is-open");
+      }
+    });
+  }
+</script>

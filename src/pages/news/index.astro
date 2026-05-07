@@ -1,0 +1,109 @@
+---
+// お知らせ一覧
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { getCollection } from "astro:content";
+
+const news = (await getCollection("news", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
+
+const formatDate = (d: Date) =>
+  new Intl.DateTimeFormat("ja-JP", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(d);
+
+const categoryLabel: Record<string, string> = {
+  news: "お知らせ",
+  release: "リリース",
+  event: "イベント",
+};
+---
+
+<BaseLayout title="お知らせ" description="GMS-Techからの最新のお知らせ・リリース情報・イベント情報をご案内します。">
+  <section class="section">
+    <div class="container">
+      <p class="eyebrow">News</p>
+      <h1 class="section-title">お知らせ</h1>
+
+      {news.length === 0 ? (
+        <p>現在お知らせはありません。</p>
+      ) : (
+        <ul class="news-list">
+          {news.map((n) => (
+            <li>
+              <a href={`/news/${n.slug}/`}>
+                <time datetime={n.data.date.toISOString()}>
+                  {formatDate(n.data.date)}
+                </time>
+                <span class="news-list__cat">
+                  {categoryLabel[n.data.category] ?? n.data.category}
+                </span>
+                <span class="news-list__title">{n.data.title}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .news-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .news-list li {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .news-list a {
+    display: grid;
+    grid-template-columns: 110px 100px 1fr;
+    gap: 1.25rem;
+    align-items: baseline;
+    padding: 1.25rem 0;
+    transition: color 0.15s ease;
+  }
+
+  .news-list a:hover .news-list__title {
+    color: var(--color-accent);
+  }
+
+  .news-list time {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    color: var(--color-text-muted);
+  }
+
+  .news-list__cat {
+    font-size: 0.75rem;
+    background: var(--color-bg-subtle);
+    border: 1px solid var(--color-border);
+    padding: 0.22rem 0.55rem;
+    border-radius: 4px;
+    text-align: center;
+    color: var(--color-text-muted);
+  }
+
+  .news-list__title {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+
+  @media (max-width: 640px) {
+    .news-list a {
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+      padding: 1rem 0;
+    }
+    .news-list__cat {
+      justify-self: start;
+    }
+  }
+</style>
